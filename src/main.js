@@ -48,7 +48,7 @@ export default async ({ req, res, log, error }) => {
     // get analyitics object id
     const analyticsDocs = await databases.listDocuments(
       process.env.DB_ID, // Database ID
-      process.env.CLICKS_COL_ID, // Collection ID
+      process.env.ANALYTICS_COL_ID, // Collection ID
       [
         Query.equal('user', uid),
         Query.equal('month', currentMonth),
