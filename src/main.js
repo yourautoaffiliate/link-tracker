@@ -4,42 +4,15 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// This Appwrite function will be executed every time your function is triggered
-export default async function trackFunction({
-  req,
-  res,
-  log = console.log,
-  error = console.error,
-}) {
-  // You can use the Appwrite SDK to interact with other services
-  // For this example, we're using the Users service
+const client = new Client()
+  .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
+  .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
+  .setKey(process.env.APPWRITE_API_KEY);
 
-  // const users = new Users(client);
+const databases = new Databases(client);
 
-  const redirectUrl = req.query.redirect;
-  const uid = req.query.uid;
-
-  // Capture request details
-  const ip =
-    req.headers['x-forwarded-for']?.split(',')[0] ||
-    req.connection?.remoteAddress;
-  const ua = req.headers['user-agent'] || 'unknown';
-
-  if (!redirectUrl) {
-    return res.send('Missing redirect param', 400);
-  }
-
-  // Redirect user
-  res.redirect(redirectUrl, 302);
-
+async function updateDB(uid, redirectUrl, ip, ua, log, error) {
   try {
-    const client = new Client()
-      .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
-      .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
-      .setKey(process.env.APPWRITE_API_KEY);
-
-    const databases = new Databases(client);
-
     // Lookup city via free API
     let city = 'unknown';
     try {
@@ -88,11 +61,38 @@ export default async function trackFunction({
         }
       );
     }
-
-    return res.empty();
   } catch (e) {
     error(e.message);
-    throw e;
-    // return res.send('Server Error', 500);
   }
+}
+
+// This Appwrite function will be executed every time your function is triggered
+export default async function trackFunction({
+  req,
+  res,
+  log = console.log,
+  error = console.error,
+}) {
+  // You can use the Appwrite SDK to interact with other services
+  // For this example, we're using the Users service
+
+  // const users = new Users(client);
+
+  const redirectUrl = req.query.redirect;
+  const uid = req.query.uid;
+
+  // Capture request details
+  const ip =
+    req.headers['x-forwarded-for']?.split(',')[0] ||
+    req.connection?.remoteAddress;
+  const ua = req.headers['user-agent'] || 'unknown';
+
+  if (!redirectUrl) {
+    return res.send('Missing redirect param', 400);
+  }
+
+  updateDB(uid, redirectUrl, ip, ua, log, error);
+
+  // Redirect user
+  return res.redirect(redirectUrl, 302);
 }
