@@ -30,7 +30,7 @@ export default async function trackFunction({
   }
 
   // Redirect user
-  res.redirect(302, redirectUrl);
+  res.redirect(redirectUrl, 302);
 
   try {
     const client = new Client()
