@@ -15,12 +15,14 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
   try {
     // Lookup city via free API
     let city = 'unknown';
-    try {
-      const geoRes = await fetch(`http://ip-api.com/json/${ip}?fields=city`);
-      const geoData = await geoRes.json();
-      city = geoData.city || 'unknown';
-    } catch (e) {
-      log('Geo lookup failed: ' + e.message);
+    if (ip !== 'unknown') {
+      try {
+        const geoRes = await fetch(`http://ip-api.com/json/${ip}?fields=city`);
+        const geoData = await geoRes.json();
+        city = geoData.city || 'unknown';
+      } catch (e) {
+        log('Geo lookup failed: ' + e.message);
+      }
     }
     const currentMonth = new Date().toLocaleString('default', {
       month: 'long',
@@ -84,9 +86,7 @@ export default async function trackFunction({
   log(JSON.stringify(req.headers));
 
   // Capture request details
-  const ip =
-    req.headers['x-forwarded-for']?.split(',')[0] ||
-    req.connection?.remoteAddress;
+  const ip = req.headers['cf-connecting-ip'] || 'unknown';
   const ua = req.headers['user-agent'] || 'unknown';
 
   if (!redirectUrl) {
