@@ -1,5 +1,5 @@
 import { Client, Databases, Query } from 'node-appwrite';
-import { extractDomain } from './utils';
+import extractDomain from './utils';
 
 // This Appwrite function will be executed every time your function is triggered
 export default async ({ req, res, log, error }) => {
