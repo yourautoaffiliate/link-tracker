@@ -93,7 +93,7 @@ export default async function trackFunction({
   const uid = req.query.uid;
 
   // Capture request details
-  const ip = req.headers['cf-connecting-ip'] || 'unknown';
+  const ip = req.headers['fastl-client-ip'] || 'unknown';
   const ua = req.headers['user-agent'] || 'unknown';
 
   if (!redirectUrl) {
