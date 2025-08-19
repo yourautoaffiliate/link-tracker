@@ -12,7 +12,6 @@ const client = new Client()
 const databases = new Databases(client);
 
 async function updateDB(uid, redirectUrl, ip, ua, log, error) {
-  log('Updating DB');
   try {
     // Lookup city via free API
     let city = 'unknown';
@@ -77,15 +76,12 @@ export default async function trackFunction({
   log = console.log,
   error = console.error,
 }) {
-  // You can use the Appwrite SDK to interact with other services
-  // For this example, we're using the Users service
-
-  // const users = new Users(client);
+  if (req.path !== '/track') {
+    return res.send('Not found', 404);
+  }
 
   const redirectUrl = req.query.redirect;
   const uid = req.query.uid;
-
-  log(JSON.stringify(req.headers));
 
   // Capture request details
   const ip = req.headers['cf-connecting-ip'] || 'unknown';
@@ -98,5 +94,6 @@ export default async function trackFunction({
   updateDB(uid, redirectUrl, ip, ua, log, error);
 
   // Redirect user
-  return res.redirect(redirectUrl, 302);
+  // return res.redirect(redirectUrl, 302);
+  return res.redirect(302, redirectUrl);
 }

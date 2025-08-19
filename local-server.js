@@ -8,7 +8,7 @@ const app = express();
 const port = 3000;
 
 // Pass Express req/res directly to your Appwrite function
-app.get('/', (req, res) => {
+app.get('/track', (req, res) => {
   trackFunction({ req, res });
 });
 
