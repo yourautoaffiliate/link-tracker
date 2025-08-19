@@ -1,4 +1,4 @@
-function extractDomain(redirectUrl) {
+export function extractDomain(redirectUrl) {
   try {
     const url = new URL(redirectUrl);
 
@@ -27,5 +27,3 @@ function extractDomain(redirectUrl) {
     return null; // Invalid redirect URL
   }
 }
-
-export default extractDomain;
