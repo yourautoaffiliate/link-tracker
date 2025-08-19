@@ -12,6 +12,7 @@ const client = new Client()
 const databases = new Databases(client);
 
 async function updateDB(uid, redirectUrl, ip, ua, log, error) {
+  log('Updating DB');
   try {
     // Lookup city via free API
     let city = 'unknown';
@@ -65,6 +66,7 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
     }
   } catch (e) {
     error(e.message);
+    log(e.message);
   }
 }
 
