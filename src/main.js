@@ -29,6 +29,18 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
     });
     const currentYear = new Date().getFullYear();
 
+    // check if click already exists
+    if (ip !== 'unknown') {
+      const clicksDocs = await databases.listDocuments(
+        process.env.DB_ID, // Database ID
+        process.env.CLICKS_COL_ID, // Collection ID
+        [Query.equal('redirectUrl', redirectUrl), Query.equal('ip', ip)]
+      );
+      if (clicksDocs.total > 0) {
+        return;
+      }
+    }
+
     // get analyitics object id
     const analyticsDocs = await databases.listDocuments(
       process.env.DB_ID, // Database ID
@@ -76,10 +88,6 @@ export default async function trackFunction({
   log = console.log,
   error = console.error,
 }) {
-  if (req.path !== '/track') {
-    return res.send('Not found', 404);
-  }
-
   const redirectUrl = req.query.redirect;
   const uid = req.query.uid;
 
