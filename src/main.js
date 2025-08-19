@@ -102,6 +102,5 @@ export default async function trackFunction({
   updateDB(uid, redirectUrl, ip, ua, log, error);
 
   // Redirect user
-  // return res.redirect(redirectUrl, 302);
-  return res.redirect(302, redirectUrl);
+  return res.redirect(redirectUrl, 302);
 }
