@@ -88,6 +88,8 @@ export default async function trackFunction({
         }
       );
     }
+
+    return res.empty();
   } catch (e) {
     error(e.message);
     throw e;
