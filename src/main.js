@@ -88,6 +88,7 @@ export default async function trackFunction({
   log = console.log,
   error = console.error,
 }) {
+  log(req.headers);
   const redirectUrl = req.query.redirect;
   const uid = req.query.uid;
 
