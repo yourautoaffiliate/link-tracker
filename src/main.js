@@ -81,6 +81,8 @@ export default async function trackFunction({
   const redirectUrl = req.query.redirect;
   const uid = req.query.uid;
 
+  log(JSON.stringify(req.headers));
+
   // Capture request details
   const ip =
     req.headers['x-forwarded-for']?.split(',')[0] ||
