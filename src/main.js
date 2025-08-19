@@ -1,8 +1,16 @@
 import { Client, Databases, Query } from 'node-appwrite';
 import { extractDomain } from './utils.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // This Appwrite function will be executed every time your function is triggered
-export default async ({ req, res, log, error }) => {
+export default async function trackFunction({
+  req,
+  res,
+  log = console.log,
+  error = console.error,
+}) {
   // You can use the Appwrite SDK to interact with other services
   // For this example, we're using the Users service
 
@@ -11,12 +19,18 @@ export default async ({ req, res, log, error }) => {
   const redirectUrl = req.query.redirect;
   const uid = req.query.uid;
 
+  // Capture request details
+  const ip =
+    req.headers['x-forwarded-for']?.split(',')[0] ||
+    req.connection?.remoteAddress;
+  const ua = req.headers['user-agent'] || 'unknown';
+
   if (!redirectUrl) {
     return res.send('Missing redirect param', 400);
   }
 
   // Redirect user
-  res.redirect(redirectUrl, 302);
+  res.redirect(302, redirectUrl);
 
   try {
     const client = new Client()
@@ -25,12 +39,6 @@ export default async ({ req, res, log, error }) => {
       .setKey(process.env.APPWRITE_API_KEY);
 
     const databases = new Databases(client);
-
-    // Capture request details
-    const ip =
-      req.headers['x-forwarded-for']?.split(',')[0] ||
-      req.connection?.remoteAddress;
-    const ua = req.headers['user-agent'] || 'unknown';
 
     // Lookup city via free API
     let city = 'unknown';
@@ -41,8 +49,9 @@ export default async ({ req, res, log, error }) => {
     } catch (e) {
       log('Geo lookup failed: ' + e.message);
     }
-
-    const currentMonth = new Date().getMonth();
+    const currentMonth = new Date().toLocaleString('default', {
+      month: 'long',
+    });
     const currentYear = new Date().getFullYear();
 
     // get analyitics object id
@@ -81,6 +90,7 @@ export default async ({ req, res, log, error }) => {
     }
   } catch (e) {
     error(e.message);
-    return res.send('Server Error', 500);
+    throw e;
+    // return res.send('Server Error', 500);
   }
-};
+}
