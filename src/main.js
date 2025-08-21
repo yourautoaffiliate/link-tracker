@@ -76,7 +76,7 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
         }
       );
     }
-    notifyAdmin('Clicked link: ' + redirectUrl);
+    await notifyAdmin('Clicked link: ' + redirectUrl);
   } catch (e) {
     error(e.message);
     log(e.message);
