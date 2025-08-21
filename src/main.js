@@ -1,5 +1,5 @@
 import { Client, Databases, Query } from 'node-appwrite';
-import { extractDomain } from './utils.js';
+import { extractDomain, notifyAdmin } from './utils.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -22,6 +22,7 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
         city = geoData.city || 'unknown';
       } catch (e) {
         log('Geo lookup failed: ' + e.message);
+        notifyAdmin('Geo lookup failed: ' + e.message);
       }
     }
     const currentMonth = new Date().toLocaleString('default', {
@@ -78,6 +79,7 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
   } catch (e) {
     error(e.message);
     log(e.message);
+    notifyAdmin(e.message);
   }
 }
 
