@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-const https = require('https');
 
 export function extractDomain(redirectUrl) {
   try {
@@ -31,51 +30,20 @@ export function extractDomain(redirectUrl) {
   }
 }
 
-// export async function notifyAdmin(message) {
-//   const BOT_TOKEN = '8332945325:AAEn4HDimUyNjk9SvHlQ9cglb_BAX6J0kwA';
-//   const CHAT_ID = '572769491'; // This must be a user who has started your bot
-//   // const MESSAGE = 'Hello from raw API!';
-
-//   const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-//   const body = {
-//     chat_id: CHAT_ID,
-//     text: message,
-//   };
-//   await fetch(url, {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(body),
-//   });
-//   // const data = await res.json();
-// }
-
 export async function notifyAdmin(message) {
-  const BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN';
-  const CHAT_ID = 'USER_CHAT_ID';
-  const MESSAGE = 'Hello from HTTPS!';
+  const BOT_TOKEN = '8332945325:AAEn4HDimUyNjk9SvHlQ9cglb_BAX6J0kwA';
+  const CHAT_ID = '572769491'; // This must be a user who has started your bot
+  // const MESSAGE = 'Hello from raw API!';
 
-  const data = JSON.stringify({
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  const body = {
     chat_id: CHAT_ID,
     text: message,
-  });
-
-  const options = {
-    hostname: 'api.telegram.org',
-    path: `/bot${BOT_TOKEN}/sendMessage`,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': data.length,
-    },
   };
-
-  const req = https.request(options, (res) => {
-    let response = '';
-    res.on('data', (chunk) => (response += chunk));
-    res.on('end', () => console.log(response));
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
-
-  req.on('error', (e) => console.error(e));
-  req.write(data);
-  req.end();
+  // const data = await res.json();
 }

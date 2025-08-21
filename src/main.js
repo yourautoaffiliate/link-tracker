@@ -76,6 +76,7 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
         }
       );
     }
+    await notifyAdmin('Clicked link');
   } catch (e) {
     error(e.message);
     log(e.message);
@@ -90,11 +91,8 @@ export default async function trackFunction({
   log = console.log,
   error = console.error,
 }) {
-  log(req.headers);
   const redirectUrl = req.query.redirect;
   const uid = req.query.uid;
-
-  await notifyAdmin('Clicked link: ' + redirectUrl);
 
   // Capture request details
   const ip = req.headers['fastly-client-ip'] || 'unknown';
