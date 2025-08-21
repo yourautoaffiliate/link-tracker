@@ -40,11 +40,10 @@ export async function notifyAdmin(message) {
     chat_id: CHAT_ID,
     text: message,
   };
-  const res = await fetch(url, {
+  await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  const data = await res.json();
-  console.log(data); // Telegram API response
+  // const data = await res.json();
 }

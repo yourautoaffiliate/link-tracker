@@ -25,9 +25,9 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
         notifyAdmin('Geo lookup failed: ' + e.message);
       }
     }
-    const currentMonth = new Date().toLocaleString('default', {
-      month: 'long',
-    });
+
+    //get current month in int
+    const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
 
     // check if click already exists
@@ -76,6 +76,7 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
         }
       );
     }
+    notifyAdmin('Clicked link: ' + redirectUrl);
   } catch (e) {
     error(e.message);
     log(e.message);
