@@ -102,7 +102,7 @@ export default async function trackFunction({
     return res.send('Missing redirect param', 400);
   }
 
-  updateDB(uid, redirectUrl, ip, ua, log, error);
+  await updateDB(uid, redirectUrl, ip, ua, log, error);
 
   // Redirect user
   return res.redirect(redirectUrl, 302);
