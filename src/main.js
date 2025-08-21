@@ -76,10 +76,8 @@ async function updateDB(uid, redirectUrl, ip, ua, log, error) {
         }
       );
     }
-    await notifyAdmin('Clicked link');
   } catch (e) {
     error(e.message);
-    log(e.message);
     notifyAdmin(e.message);
   }
 }
@@ -102,7 +100,7 @@ export default async function trackFunction({
     return res.send('Missing redirect param', 400);
   }
 
-  await updateDB(uid, redirectUrl, ip, ua, log, error);
+  updateDB(uid, redirectUrl, ip, ua, log, error);
 
   // Redirect user
   return res.redirect(redirectUrl, 302);
