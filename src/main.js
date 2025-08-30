@@ -89,11 +89,20 @@ export default async function trackFunction({
   log = console.log,
   error = console.error,
 }) {
-  const redirectUrl = req.query.redirect;
   const uid = req.query.uid;
 
+  // Extract everything after "redirect="
+  const redirectMatch = fullUrl.match(/[?&]redirect=([^#]+)/);
+  const redirectUrl = redirectMatch
+    ? decodeURIComponent(redirectMatch[1])
+    : null;
+
   // Capture request details
-  const ip = req.headers['fastly-client-ip'] || 'unknown';
+  const ip =
+    req.headers['fastly-client-ip'] ||
+    req.headers['x-forwarded-for'] ||
+    req.socket.remoteAddress ||
+    'unknown';
   const ua = req.headers['user-agent'] || 'unknown';
 
   if (!redirectUrl) {
