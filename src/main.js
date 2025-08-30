@@ -90,6 +90,7 @@ export default async function trackFunction({
   error = console.error,
 }) {
   const uid = req.query.uid;
+  const fullUrl = req.url;
 
   // Extract everything after "redirect="
   const redirectMatch = fullUrl.match(/[?&]redirect=([^#]+)/);
